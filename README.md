@@ -25,11 +25,7 @@ jar application that creates its own tomcat container. It requires maven 3.3 and
 
     mvn spring-boot:run
 
-The spring boot application should then start up and you can access the URL at: http://localhost:8080/appindex.html
-
-
-## Architecture
-
+The spring boot application should then start up and you can access the URL at: http://127.0.0.1:8080/appindex.html
 
 ## The Puzzles
 
