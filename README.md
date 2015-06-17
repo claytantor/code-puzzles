@@ -31,9 +31,7 @@ The spring boot application should then start up and you can access the URL at: 
 
 ### Binary Tree Search
 
-Find the least common ancestors of 2 nodes in a binary tree. 
-The goal here is to identify the fewest similar nodes that are in 
-common above the nodes chosen.
+Find the least common ancestors of 2 nodes in a binary tree.
 
     1
     |
