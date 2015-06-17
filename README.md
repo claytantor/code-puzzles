@@ -73,4 +73,5 @@ As a JSON data structure:
         }
     }
    
-
+*Goal of Puzzle:* Find the "least common ancestor", that is, the common ancestor of both two nodes 
+ in the tree that has the greatest distance from the root node.
