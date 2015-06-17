@@ -1,5 +1,8 @@
 package com.claytantor.codepuzzles.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by claytongraham on 6/16/15.
  */
@@ -7,9 +10,14 @@ public class BinaryTreeNode {
 
 
     private Integer id;
+
+    @JsonIgnore
     private Integer depth;
+
     private BinaryTreeNode left;
     private BinaryTreeNode right;
+
+    @JsonIgnore
     private BinaryTreeNode parent;
 
     public BinaryTreeNode() {
@@ -47,18 +55,22 @@ public class BinaryTreeNode {
 
 
     /* ----------- set post constructor as part of traversal -----------*/
+    @JsonIgnore
     public BinaryTreeNode getParent() {
         return parent;
     }
 
+    @JsonProperty
     public void setParent(BinaryTreeNode parent) {
         this.parent = parent;
     }
 
+    @JsonIgnore
     public Integer getDepth() {
         return depth;
     }
 
+    @JsonProperty
     public void setDepth(Integer depth) {
         this.depth = depth;
     }

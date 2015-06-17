@@ -1,7 +1,7 @@
 # Clay's Code Puzzles
 I find that during interviews programmers like to have "white board" coding sessions around 
 problems and puzzles to "test your thinking process". I think its a really bad way to understand
-how people code. Generally I think if the best way to see how people code is to look at their code.
+how people code. Generally I think the best way to see how people code is to look at their code.
 Give them enough time to think through the problem and create tests that act as a scaffold for 
 assumptions, instead of expecting them to figure it all out stream of consciousness. Basically if 
 you want someone who does that then you want someone who codes differently than I do, and IMHO 
@@ -18,6 +18,12 @@ I wrote this project to accomplish a few things:
 * Show that I can properly compartmentalize and document code.
 
 Hopefully, this will be sufficient to make an assessment of my capabilities.
+
+# Getting Started
+
+
+# Architecture
+
 
 ## Graph System
 
