@@ -5,9 +5,14 @@ package com.claytantor.codepuzzles.model;
  */
 public class BinaryTreeNode {
 
+
     private Integer id;
     private BinaryTreeNode left;
     private BinaryTreeNode right;
+    private BinaryTreeNode parent;
+
+    public BinaryTreeNode() {
+    }
 
     public BinaryTreeNode(Integer id, BinaryTreeNode left, BinaryTreeNode right) {
         this.id = id;
@@ -25,5 +30,25 @@ public class BinaryTreeNode {
 
     public BinaryTreeNode getRight() {
         return right;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setLeft(BinaryTreeNode left) {
+        this.left = left;
+    }
+
+    public void setRight(BinaryTreeNode right) {
+        this.right = right;
+    }
+
+    public BinaryTreeNode getParent() {
+        return parent;
+    }
+
+    public void setParent(BinaryTreeNode parent) {
+        this.parent = parent;
     }
 }

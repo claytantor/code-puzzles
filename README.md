@@ -22,32 +22,26 @@ common above the nodes chosen.
   
 As a JSON data structure:
         
-    { 
-        "id":1, 
-        "children": [
-            {
-                "id":2,
-                "children":[
-                    {
-                        "id":4
-                    },
-                    {
-                        "id":5
-                    }                                        
-                ]
+    {
+        "id":1,
+        "left":{
+            "id":2,
+            "left":{
+                "id":4
             },
-            {
-                "id":3,
-                "children":[
-                    {
-                        "id":6
-                    },
-                    {
-                        "id":7
-                    }                                        
-                ]
-            }            
-        ]
+            "right":{
+                "id":5
+            }
+        },
+        "right":{
+            "id":3,
+            "left":{
+                "id":6
+            },
+            "right":{
+                "id":7
+            }
+        }
     }
    
 

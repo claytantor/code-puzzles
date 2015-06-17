@@ -12,6 +12,11 @@ import java.util.List;
 @Component
 public class BinaryTreeService {
 
+
+    public String getMessage(){
+        return "BinaryTreeService active";
+    }
+
     public List<BinaryTreeNode> searchMinimumCommonAncestors(
             BinaryTreeNode root, Integer nodeId1, Integer nodeId2){
 
@@ -28,9 +33,62 @@ public class BinaryTreeService {
         return null;
     }
 
-    public BinaryTreeNode searchNodeById(BinaryTreeNode root, Integer nodeId){
-        return null;
+    /**
+     * will return a null value if a match cant be found. You have to search
+     * both ways or it will get lost on the right or left directions
+     *
+     * @param root
+     * @param nodeId
+     * @return
+     */
+    public BinaryTreeNode searchNodeById(BinaryTreeNode root, Integer nodeId, BinaryTreeNode parent){
+        if(root.getId().equals(nodeId)) {
+            root.setParent(parent);
+            return root;
+        } else if (root.getLeft() != null) {
+            BinaryTreeNode node = searchNodeById(root.getLeft(),nodeId,root);
+            if(node == null){
+                return searchNodeById(root.getRight(),nodeId,root);
+            } else {
+                node.setParent(root);
+                return node;
+            }
+        } else if (root.getRight() != null) {
+            BinaryTreeNode node = searchNodeById(root.getRight(),nodeId,root);
+            if(node == null){
+                return searchNodeById(root.getLeft(),nodeId,root);
+            } else {
+                node.setParent(root);
+                return node;
+            }
+        } else {
+            return null;
+        }
     }
+
+    /**
+     * Reverse traversal (up). relies on reference parameter to recurse, the client uses the
+     * result of the traversal to add items to the list. WARNING: this
+     * assumes that the parent has been set in a previous traversal
+     *
+     * @param root
+     * @param nodeId
+     * @param ancestors
+     * @return
+     */
+    public void findAncestorsForNode (
+            BinaryTreeNode root, Integer nodeId, List<BinaryTreeNode> ancestors){
+
+        if(root.getParent() != null) {
+            ancestors.add(root.getParent());
+        } else {
+
+        }
+        
+
+    }
+
+
 
 
 
