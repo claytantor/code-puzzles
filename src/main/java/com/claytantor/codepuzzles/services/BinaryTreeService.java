@@ -1,8 +1,12 @@
 package com.claytantor.codepuzzles.services;
 
 import com.claytantor.codepuzzles.model.BinaryTreeNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,18 +16,34 @@ import java.util.List;
 @Component
 public class BinaryTreeService {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     public String getMessage(){
         return "BinaryTreeService active";
     }
 
+    /**
+     * Given a root binary find the minimum number of common ancestors.
+     *
+     * @param root
+     * @param nodeId1
+     * @param nodeId2
+     * @return
+     */
     public List<BinaryTreeNode> searchMinimumCommonAncestors(
             BinaryTreeNode root, Integer nodeId1, Integer nodeId2){
 
         //find the nodes by id
+        BinaryTreeNode node1 = searchNodeById(root, nodeId1, null);
+        BinaryTreeNode node2 = searchNodeById(root, nodeId2, null);
 
         //find the list of all ancestors for each node
-            // add the ids to a common set
+        List<BinaryTreeNode> ancestors = new ArrayList<BinaryTreeNode>();
+        findAncestorsForNode(node1, ancestors);
+        findAncestorsForNode(node2, ancestors);
+
+        // add the ids to a common set
 
         //reduce the set
 
@@ -35,31 +55,38 @@ public class BinaryTreeService {
 
     /**
      * will return a null value if a match cant be found. You have to search
-     * both ways or it will get lost on the right or left directions
+     * both ways or it will get lost on the right or left directions. Note: We
+     * have added the set parent as a convenience so we dont have to traverse down
+     * a second time.
      *
-     * @param root
+     * @param node
      * @param nodeId
      * @return
      */
-    public BinaryTreeNode searchNodeById(BinaryTreeNode root, Integer nodeId, BinaryTreeNode parent){
-        if(root.getId().equals(nodeId)) {
-            root.setParent(parent);
-            return root;
-        } else if (root.getLeft() != null) {
-            BinaryTreeNode node = searchNodeById(root.getLeft(),nodeId,root);
-            if(node == null){
-                return searchNodeById(root.getRight(),nodeId,root);
+    public BinaryTreeNode searchNodeById(BinaryTreeNode node, Integer nodeId, BinaryTreeNode parent){
+
+        // always set parent if it exists, otherwise the top node
+        // will be missing
+        if(parent != null){
+            log.debug(MessageFormat.format("node id:{0} parent id:{1}", node.getId(), parent.getId()));
+            node.setParent(parent);
+        }
+
+        if(node.getId().equals(nodeId)) {
+            return node;
+        } else if (node.getLeft() != null) {
+            BinaryTreeNode nodeLeft = searchNodeById(node.getLeft(), nodeId, node);
+            if(nodeLeft == null){
+                return searchNodeById(node.getRight(),nodeId, node);
             } else {
-                node.setParent(root);
-                return node;
+                return nodeLeft;
             }
-        } else if (root.getRight() != null) {
-            BinaryTreeNode node = searchNodeById(root.getRight(),nodeId,root);
-            if(node == null){
-                return searchNodeById(root.getLeft(),nodeId,root);
+        } else if (node.getRight() != null) {
+            BinaryTreeNode nodeRight = searchNodeById(node.getRight(),nodeId, node);
+            if(nodeRight == null){
+                return searchNodeById(node.getLeft(), nodeId, node);
             } else {
-                node.setParent(root);
-                return node;
+                return nodeRight;
             }
         } else {
             return null;
@@ -71,20 +98,30 @@ public class BinaryTreeService {
      * result of the traversal to add items to the list. WARNING: this
      * assumes that the parent has been set in a previous traversal
      *
-     * @param root
-     * @param nodeId
+     * @param node
      * @param ancestors
      * @return
      */
     public void findAncestorsForNode (
-            BinaryTreeNode root, Integer nodeId, List<BinaryTreeNode> ancestors){
+            BinaryTreeNode node, List<BinaryTreeNode> ancestors){
 
-        if(root.getParent() != null) {
-            ancestors.add(root.getParent());
+        log.debug(MessageFormat.format("node id:{0} ancestors size:{1}", node.getId(), ancestors.size()));
+
+        //stop at root node
+        if(node.getParent() != null) {
+            log.debug(MessageFormat.format(
+                    "node id:{0} parent id:{1} ancestors size:{2}",
+                    node.getId(),
+                    node.getParent().getId(),
+                    ancestors.size()));
+            ancestors.add(node.getParent());
+            findAncestorsForNode(node.getParent(), ancestors);
         } else {
-
+            log.debug(MessageFormat.format(
+                    "node id:{0} has no parent",
+                    node.getId()));
         }
-        
+
 
     }
 

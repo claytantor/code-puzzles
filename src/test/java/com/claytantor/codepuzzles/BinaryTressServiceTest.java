@@ -17,6 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -63,8 +65,22 @@ public class BinaryTressServiceTest {
 
     @Test
     public void canFindNodeById() {
-        BinaryTreeNode node = binaryTreeService.searchNodeById(testNode,5);
-        assertThat(binaryTreeService.searchNodeById(testNode,5).getId(), equalTo(5));
+        assertThat(binaryTreeService.searchNodeById(testNode,1,null).getId(), equalTo(1));
+        assertThat(binaryTreeService.searchNodeById(testNode,2,null).getId(), equalTo(2));
+        assertThat(binaryTreeService.searchNodeById(testNode,3,null).getId(), equalTo(3));
+        assertThat(binaryTreeService.searchNodeById(testNode,4,null).getId(), equalTo(4));
+        assertThat(binaryTreeService.searchNodeById(testNode,5,null).getId(), equalTo(5));
+        assertThat(binaryTreeService.searchNodeById(testNode,6,null).getId(), equalTo(6));
+        assertThat(binaryTreeService.searchNodeById(testNode,7,null).getId(), equalTo(7));
+    }
+
+    @Test
+    public void canFindAncestors() {
+        BinaryTreeNode node = binaryTreeService.searchNodeById(testNode,5, null);
+        List<BinaryTreeNode> ancestors = new ArrayList<BinaryTreeNode>();
+        binaryTreeService.findAncestorsForNode(node,ancestors);
+        assertThat(ancestors.size(), equalTo(2));
+
     }
 
 
