@@ -7,6 +7,7 @@ public class BinaryTreeNode {
 
 
     private Integer id;
+    private Integer depth;
     private BinaryTreeNode left;
     private BinaryTreeNode right;
     private BinaryTreeNode parent;
@@ -44,11 +45,34 @@ public class BinaryTreeNode {
         this.right = right;
     }
 
+
+    /* ----------- set post constructor as part of traversal -----------*/
     public BinaryTreeNode getParent() {
         return parent;
     }
 
     public void setParent(BinaryTreeNode parent) {
         this.parent = parent;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
+    }
+
+    /**
+     * Custom equals to insure that the sets and comparisions
+     * are based on Id
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        BinaryTreeNode compareTo = (BinaryTreeNode)obj;
+        return getId().equals(compareTo.getId());
     }
 }

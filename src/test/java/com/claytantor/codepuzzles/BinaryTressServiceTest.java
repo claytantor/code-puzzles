@@ -5,7 +5,6 @@ import com.claytantor.codepuzzles.services.BinaryTreeService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -36,15 +36,30 @@ public class BinaryTressServiceTest {
     @Autowired
     private BinaryTreeService binaryTreeService;
 
-    private BinaryTreeNode testNode;
+    //static/json/binary-tree01.json
+    private BinaryTreeNode testNode01;
+
+    //static/json/binary-tree02.json
+    private BinaryTreeNode testNode02;
 
     @Before
     public  void setUp(){
         try {
-            String nodes = IOUtils.toString(BinaryTressServiceTest.class.getResourceAsStream("/static/json/binary-tree01.json"), "UTF-8");
-            log.debug(nodes);
             ObjectMapper mapper = new ObjectMapper();
-            this.testNode = mapper.readValue(nodes, BinaryTreeNode.class);
+
+            //load nodes01
+            String nodes01 = IOUtils.toString(
+                    BinaryTressServiceTest.class.getResourceAsStream(
+                            "/static/json/binary-tree01.json"), "UTF-8");
+            this.testNode01 = mapper.readValue(nodes01, BinaryTreeNode.class);
+
+            //load nodes02
+            String nodes02 = IOUtils.toString(
+                    BinaryTressServiceTest.class.getResourceAsStream(
+                            "/static/json/binary-tree02.json"), "UTF-8");
+            this.testNode02 = mapper.readValue(nodes02, BinaryTreeNode.class);
+
+
         } catch (JsonMappingException e) {
             log.error("problem deserializing file",e);
         } catch (IOException e) {
@@ -54,32 +69,90 @@ public class BinaryTressServiceTest {
 
     @Test
     public void canFindTestNode() {
-        assertThat(testNode.getId(), equalTo(1));
-        assertThat(testNode.getLeft().getId(), equalTo(2));
-        assertThat(testNode.getLeft().getLeft().getId(), equalTo(4));
-        assertThat(testNode.getLeft().getRight().getId(), equalTo(5));
-        assertThat(testNode.getRight().getId(), equalTo(3));
-        assertThat(testNode.getRight().getLeft().getId(), equalTo(6));
-        assertThat(testNode.getRight().getRight().getId(), equalTo(7));
+        assertThat(testNode01.getId(), equalTo(1));
+        assertThat(testNode01.getLeft().getId(), equalTo(2));
+        assertThat(testNode01.getLeft().getLeft().getId(), equalTo(4));
+        assertThat(testNode01.getLeft().getRight().getId(), equalTo(5));
+        assertThat(testNode01.getRight().getId(), equalTo(3));
+        assertThat(testNode01.getRight().getLeft().getId(), equalTo(6));
+        assertThat(testNode01.getRight().getRight().getId(), equalTo(7));
     }
 
     @Test
     public void canFindNodeById() {
-        assertThat(binaryTreeService.searchNodeById(testNode,1,null).getId(), equalTo(1));
-        assertThat(binaryTreeService.searchNodeById(testNode,2,null).getId(), equalTo(2));
-        assertThat(binaryTreeService.searchNodeById(testNode,3,null).getId(), equalTo(3));
-        assertThat(binaryTreeService.searchNodeById(testNode,4,null).getId(), equalTo(4));
-        assertThat(binaryTreeService.searchNodeById(testNode,5,null).getId(), equalTo(5));
-        assertThat(binaryTreeService.searchNodeById(testNode,6,null).getId(), equalTo(6));
-        assertThat(binaryTreeService.searchNodeById(testNode,7,null).getId(), equalTo(7));
+        assertThat(binaryTreeService.searchNodeById(testNode01,1,null,testNode01).getId(), equalTo(1));
+        assertThat(binaryTreeService.searchNodeById(testNode01,2,null,testNode01).getId(), equalTo(2));
+        assertThat(binaryTreeService.searchNodeById(testNode01,3,null,testNode01).getId(), equalTo(3));
+        assertThat(binaryTreeService.searchNodeById(testNode01,4,null,testNode01).getId(), equalTo(4));
+        assertThat(binaryTreeService.searchNodeById(testNode01,5,null,testNode01).getId(), equalTo(5));
+        assertThat(binaryTreeService.searchNodeById(testNode01,6,null,testNode01).getId(), equalTo(6));
+        assertThat(binaryTreeService.searchNodeById(testNode01,7,null,testNode01).getId(), equalTo(7));
     }
 
     @Test
     public void canFindAncestors() {
-        BinaryTreeNode node = binaryTreeService.searchNodeById(testNode,5, null);
-        List<BinaryTreeNode> ancestors = new ArrayList<BinaryTreeNode>();
+        BinaryTreeNode node = binaryTreeService.searchNodeById(testNode01,5, null,testNode01);
+        List<BinaryTreeNode> ancestors = new ArrayList<>();
         binaryTreeService.findAncestorsForNode(node,ancestors);
         assertThat(ancestors.size(), equalTo(2));
+    }
+
+    @Test
+    public void canFindCommonAncestors01() {
+
+        // find the nodes by id
+        BinaryTreeNode node1 = binaryTreeService.searchNodeById(testNode01, 5, null,testNode01);
+        BinaryTreeNode node2 = binaryTreeService.searchNodeById(testNode01, 7, null,testNode01);
+
+        // find the list of all ancestors for each node
+        List<BinaryTreeNode> ancestors = new ArrayList<BinaryTreeNode>();
+        binaryTreeService.findAncestorsForNode(node1, ancestors);
+        binaryTreeService.findAncestorsForNode(node2, ancestors);
+
+        // filter nodes that are not common ancestors
+        Set<BinaryTreeNode> commonAncestors =
+                binaryTreeService.findCommonAncestors(node1, node2, ancestors);
+
+        //should be id=1
+        assertThat(commonAncestors.size(), equalTo(1));
+
+        // Create an array containing the elements in a set
+        Object[] objectArray = commonAncestors.toArray();
+        BinaryTreeNode[] array =
+                (BinaryTreeNode[])commonAncestors.toArray(
+                        new BinaryTreeNode[commonAncestors.size()]);
+
+        assertThat(array[0].getId(), equalTo(1));
+
+    }
+
+    @Test
+    public void canFindCommonAncestors02() {
+
+        // find the nodes by id
+        BinaryTreeNode node1 = binaryTreeService.searchNodeById(testNode02, 10, null, testNode02);
+        BinaryTreeNode node2 = binaryTreeService.searchNodeById(testNode02, 15, null, testNode02);
+
+        // find the list of all ancestors for each node
+        List<BinaryTreeNode> ancestors = new ArrayList<>();
+        binaryTreeService.findAncestorsForNode(node1, ancestors);
+        binaryTreeService.findAncestorsForNode(node2, ancestors);
+
+        // filter nodes that are not common ancestors
+        Set<BinaryTreeNode> commonAncestors =
+                binaryTreeService.findCommonAncestors(node1, node2, ancestors);
+
+        //should be id=7,3,1
+        assertThat(commonAncestors.size(), equalTo(3));
+
+    }
+
+    @Test
+    public void canFindLeastCommonAncestors() {
+
+        BinaryTreeNode minCommonAncestor10_15_02 =
+                binaryTreeService.findMinimumCommonAncestors(testNode02,10,15);
+        assertThat(minCommonAncestor10_15_02.getId(), equalTo(7));
 
     }
 
