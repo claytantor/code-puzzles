@@ -1,4 +1,4 @@
-# Clay's Code Puzzles
+# Code Puzzles
 I find that during interviews programmers like to have "white board" coding sessions around 
 problems and puzzles to "test your thinking process". I think its a really bad way to understand
 how people code. Generally I think the best way to see how people code is to look at their code.
@@ -19,13 +19,21 @@ I wrote this project to accomplish a few things:
 
 Hopefully, this will be sufficient to make an assessment of my capabilities.
 
-# Getting Started
+## Getting Started
+Code puzzles is a spring-boot & angularJS application. It is intended to be buildable as a single 
+jar application that creates its own tomcat container. It requires maven 3.3 and Java 1.7.
+
+    mvn spring-boot:run
+
+The spring boot application should then start up and you can access the URL at: http://localhost:8080/appindex.html
 
 
-# Architecture
+## Architecture
 
 
-## Graph System
+## The Puzzles
+
+### Binary Tree Search
 
 Find the least common ancestors of 2 nodes in a binary tree. 
 The goal here is to identify the fewest similar nodes that are in 
