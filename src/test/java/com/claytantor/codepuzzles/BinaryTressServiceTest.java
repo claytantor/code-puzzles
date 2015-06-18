@@ -16,9 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -144,7 +142,12 @@ public class BinaryTressServiceTest {
 
         //should be id=7,3,1
         assertThat(commonAncestors.size(), equalTo(3));
-
+        Map<Integer,BinaryTreeNode> lookup = new HashMap<>();
+        for(BinaryTreeNode node:commonAncestors)
+            lookup.put(node.getId(),node);
+        assertThat(lookup.get(7).getId(), equalTo(7));
+        assertThat(lookup.get(3).getId(), equalTo(3));
+        assertThat(lookup.get(1).getId(), equalTo(1));
     }
 
     @Test
