@@ -148,7 +148,7 @@ public class BinaryTressServiceTest {
         assertThat(lookup.get(7).getId(), equalTo(7));
         assertThat(lookup.get(3).getId(), equalTo(3));
         assertThat(lookup.get(1).getId(), equalTo(1));
-    }
+    } 
 
     @Test
     public void canFindLeastCommonAncestors() {
